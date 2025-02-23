@@ -101,4 +101,25 @@ shared({ caller }) actor class() {
     return new_task;
   };
 
+  public func delete_task(task_id: Nat) : async Bool {
+    let user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list();
+
+    switch (AssocList.find<Nat, Types.Task>(user_tasks, task_id, tasks_id_eq)) {
+        case (?task) {
+            let can_delete = await has_permission(caller, task);
+
+            if (can_delete) {
+                let updated_tasks = AssocList.replace(user_tasks, task_id, tasks_id_eq, null).0;
+                tasks := AssocList.replace(tasks, caller, principal_eq, ?updated_tasks).0;
+                
+                return true;
+            } else {
+                throw Error.reject("User does not have permission to delete this task.");
+            }
+        };
+        case null {
+            throw Error.reject("Task was not found.");
+        };
+    };
+  };
 };
