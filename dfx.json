@@ -13,15 +13,12 @@
     },
     "todoapp-icp-react-backend": {
       "main": "src/todoapp-icp-react-backend/main.mo",
-      "type": "motoko"
+      "type": "motoko",
+      "dependencies": ["internet_identity"]
     },
     "todoapp-icp-react-frontend": {
-      "dependencies": [
-        "todoapp-icp-react-backend"
-      ],
-      "source": [
-        "src/todoapp-icp-react-frontend/dist"
-      ],
+      "dependencies": ["todoapp-icp-react-backend"],
+      "source": ["src/todoapp-icp-react-frontend/dist"],
       "type": "assets",
       "workspace": "todoapp-icp-react-frontend"
     }
