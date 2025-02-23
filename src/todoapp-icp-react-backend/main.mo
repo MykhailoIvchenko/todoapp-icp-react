@@ -25,10 +25,6 @@ shared({ caller }) actor class() {
     return first_principal == second_principal;
   };
 
-  func tasks_eq(first_task: Types.Task, second_task: Types.Task): Bool {
-    return first_task.taskId == second_task.taskId;
-  };
-
   func tasks_id_eq(first_task_id: Nat, second_task_id: Nat): Bool {
     return first_task_id == second_task_id;
   };
@@ -39,6 +35,33 @@ shared({ caller }) actor class() {
 
   public func set_username(new_username: Text) : () {
     usernames := AssocList.replace(usernames, caller, principal_eq, ?new_username).0;
+  };
+
+  func get_user_tasks_assoc_list() : async AssocList.AssocList<Nat, Types.Task> {
+    let is_auth = await is_authenticated();
+    
+    if (is_auth == false) {
+      throw Error.reject("User is not authenticated.");
+    };
+
+    var existing_tasks : AssocList.AssocList<Nat, Types.Task> = 
+      switch (AssocList.find<Principal, AssocList.AssocList<Nat, Types.Task>>(tasks, caller, principal_eq)) {
+        case (?tasks_list) tasks_list;
+        case null List.nil();
+      };
+
+    return existing_tasks;
+  };
+
+  public func get_user_tasks(): async[Types.Task] {
+    let user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list();
+
+    let mapped_tasks = List.map<(Nat, Types.Task), Types.Task>(
+        user_tasks,
+        func(task_pair) : Types.Task { task_pair.1 }
+    );
+
+    return List.toArray(mapped_tasks);
   };
 
   public func create_task(
@@ -81,4 +104,5 @@ shared({ caller }) actor class() {
 
     return new_task;
   };
+
 };
