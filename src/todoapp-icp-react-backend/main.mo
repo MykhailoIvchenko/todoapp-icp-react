@@ -1,23 +1,31 @@
 import AssocList "mo:base/AssocList";
-import Text "mo:base/Text";
-import Bool "mo:base/Bool";
 import Error "mo:base/Error";
 import Principal "mo:base/Principal";
 import List "mo:base/List";
 import Types "./Types";
 
 shared({ caller }) actor class() {
-  stable var user_names : AssocList.AssocList<Principal, Text> = List.nil();
+  stable var usernames : AssocList.AssocList<Principal, Text> = List.nil();
 
   stable var tasks: AssocList.AssocList<Principal, [Types.Task]> = List.nil();
 
-  public func is_authenticated() : async Bool {
+  func is_authenticated() : async Bool {
     return Principal.isAnonymous(caller) == false;
   };
   
-  public func has_permission(caller : Principal, task : Types.Task) : async Bool {
+  func has_permission(caller : Principal, task : Types.Task) : async Bool {
     return caller == task.userPrincipalId;
-  }
+  };
 
-  
+  func principal_eq(first_principal: Principal, second_principal: Principal): Bool {
+    return first_principal == second_principal;
+  };
+
+  public func get_username(user: Principal) : async ?Text {
+    AssocList.find<Principal, Text>(usernames, user, principal_eq);
+  };
+
+  public func set_username(new_username: Text) : () {
+    usernames := AssocList.replace(usernames, caller, principal_eq, ?new_username).0;
+  }
 };
