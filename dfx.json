@@ -14,7 +14,7 @@
     "todoapp-icp-react-backend": {
       "main": "src/todoapp-icp-react-backend/main.mo",
       "type": "motoko",
-      "dependencies": ["internet_identity"]
+      "dependencies": ["internet_identity", "motoko_base"]
     },
     "todoapp-icp-react-frontend": {
       "dependencies": ["todoapp-icp-react-backend"],
