@@ -92,11 +92,7 @@ shared({ caller }) actor class() {
       status = #notCompleted;
     };
 
-    var user_tasks : AssocList.AssocList<Nat, Types.Task> = 
-    switch (AssocList.find<Principal, AssocList.AssocList<Nat, Types.Task>>(tasks, caller, principal_eq)) {
-      case (?tasks_list) tasks_list;
-      case null List.nil();
-    };
+    var user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list();
 
     user_tasks := AssocList.replace(user_tasks, task_id, tasks_id_eq, ?new_task).0;
 
