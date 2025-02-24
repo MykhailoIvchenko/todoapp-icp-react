@@ -3,7 +3,7 @@ import { useAppDispatch } from '../helperHooks';
 
 type SetPrincipalIdAction = (principalId: string) => void;
 
-const useUserNameDispatch = (): SetPrincipalIdAction => {
+const usePrincipalIdDispatch = (): SetPrincipalIdAction => {
   const dispatch = useAppDispatch();
 
   const setPrincipal = (principalId: string) => {
@@ -13,4 +13,4 @@ const useUserNameDispatch = (): SetPrincipalIdAction => {
   return setPrincipal;
 };
 
-export default useUserNameDispatch;
+export default usePrincipalIdDispatch;

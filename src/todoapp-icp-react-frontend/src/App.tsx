@@ -1,5 +1,11 @@
+import CheckAccess from './components/CheckAccess';
+
 function App() {
-  return <main></main>;
+  return (
+    <main>
+      <CheckAccess />
+    </main>
+  );
 }
 
 export default App;
