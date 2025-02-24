@@ -5,17 +5,15 @@ import usePrincipalIdDispatch from '../redux/hooks/dispatchHooks/usePrincipalIdD
 import useUserDispatch from '../redux/hooks/dispatchHooks/useUserDispatch';
 
 const LoginPage: React.FC = () => {
-  const { login, loginStatus, identity, clear } = useInternetIdentity();
+  const { login, loginStatus, identity } = useInternetIdentity();
 
-  const setUser = useUserDispatch();
+  const setPrincipalId = usePrincipalIdDispatch();
 
   const handleLoginCompleted = () => {
     if (identity) {
       const principalId = identity.getPrincipal().toString();
 
-      console.log(principalId);
-
-      setUser({ principalId });
+      setPrincipalId(principalId);
     }
   };
 
@@ -25,7 +23,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className='login-page'>
-      {loginStatus == 'logging-in' ? (
+      {loginStatus == 'logging-in' || loginStatus == 'idle' ? (
         <Loader />
       ) : (
         <button type='button' onClick={login} className='login-button'>
