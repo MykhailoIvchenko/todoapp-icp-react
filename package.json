@@ -14,5 +14,12 @@
   "type": "module",
   "workspaces": [
     "src/todoapp-icp-react-frontend"
-  ]
+  ],
+  "dependencies": {
+    "@dfinity/agent": "^2.3.0",
+    "@dfinity/auth-client": "^2.3.0",
+    "@dfinity/identity": "^2.3.0",
+    "clsx": "^2.1.1",
+    "ic-use-internet-identity": "^0.2.0"
+  }
 }
