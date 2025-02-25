@@ -1,6 +1,9 @@
+import { useCallback, useState } from 'react';
 import { useSelectUser } from '../../redux/hooks/selectHooks/useSelectUser';
+import { TaskStatus } from '../../utils/enums';
 import Button from '../Button';
 import Todo from './Todo';
+import Modal from '../Modal';
 
 const mockedTodos = [
   {
@@ -63,28 +66,32 @@ const TodosPage: React.FC = () => {
   const user = useSelectUser();
 
   return (
-    <div className='todos-page'>
-      <h1 className='todos-page__title'>{user?.username || 'Anonymous'}</h1>
-      <div className='todos-page__content'>
-        <header className='todos-page__header'>
-          <span className='todos-page__list-title'>What needs to be done?</span>
+    <div className='todos-page-container'>
+      <div className='todos-page'>
+        <h1 className='todos-page__title'>{user?.username || 'Anonymous'}</h1>
+        <div className='todos-page__content'>
+          <header className='todos-page__header'>
+            <span className='todos-page__list-title'>
+              What needs to be done?
+            </span>
 
-          <Button text='Add' />
-        </header>
+            <Button text='Add' />
+          </header>
 
-        <section className='todos-page__main'>
-          {mockedTodos.map((todo) => (
-            <Todo
-              title={todo.title}
-              description={todo.description}
-              status={todo.status}
-            />
-          ))}
-        </section>
+          <section className='todos-page__main'>
+            {mockedTodos.map((todo) => (
+              <Todo
+                title={todo.title}
+                description={todo.description}
+                status={todo.status as TaskStatus}
+              />
+            ))}
+          </section>
 
-        <footer className='todos-page__footer'>
-          <span className='todo-count'>3 items left</span>
-        </footer>
+          <footer className='todos-page__footer'>
+            <span className='todo-count'>3 items left</span>
+          </footer>
+        </div>
       </div>
     </div>
   );
