@@ -1,12 +1,10 @@
 import { Actor, ActorMethod, ActorSubclass, HttpAgent } from '@dfinity/agent';
-import { useSelectUser } from '../redux/hooks/selectHooks/useSelectUser';
-import { useEffect } from 'react';
 import { Principal } from '@dfinity/principal';
 import { useInternetIdentity } from 'ic-use-internet-identity';
 
-type UseDfinityAgent = () => {
-  actor: ActorSubclass<Record<string, ActorMethod<unknown[], unknown>>>;
-};
+type UseDfinityAgent = () => ActorSubclass<
+  Record<string, ActorMethod<unknown[], unknown>>
+> | null;
 
 const host = 'http://127.0.0.1:4943'; //TODO: Change it in prod
 
@@ -52,10 +50,14 @@ export const useDfinityAgent: UseDfinityAgent = () => {
       ),
     });
 
+  if (!identity) {
+    return null;
+  }
+
   const actor = Actor.createActor(idlFactory, {
     agent: HttpAgent.createSync({ identity }),
     canisterId: Principal.fromText(canisterId),
   });
 
-  return { actor };
+  return actor;
 };

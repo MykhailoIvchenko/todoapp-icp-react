@@ -77,8 +77,6 @@ const TodosPage: React.FC = () => {
 
   const user = useSelectUser();
 
-  useDfinityAgent();
-
   return (
     <div className='todos-page-container'>
       <div className='todos-page'>
