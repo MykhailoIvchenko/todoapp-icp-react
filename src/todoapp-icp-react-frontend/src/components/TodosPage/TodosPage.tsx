@@ -63,6 +63,12 @@ const mockedTodos = [
 ];
 
 const TodosPage: React.FC = () => {
+  const [showAddModal, setShowAddModal] = useState<boolean>(true);
+
+  const closeModal = useCallback(() => {
+    setShowAddModal(false);
+  }, []);
+
   const user = useSelectUser();
 
   return (
@@ -89,9 +95,15 @@ const TodosPage: React.FC = () => {
           </section>
 
           <footer className='todos-page__footer'>
-            <span className='todo-count'>3 items left</span>
+            <span className='todo-count'>{mockedTodos.length} items left</span>
           </footer>
         </div>
+
+        {showAddModal && (
+          <Modal isOpen={showAddModal} onClose={closeModal}>
+            Add task
+          </Modal>
+        )}
       </div>
     </div>
   );
