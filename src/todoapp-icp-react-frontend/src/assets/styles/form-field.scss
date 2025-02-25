@@ -14,10 +14,11 @@
 
 .error-text {
   position: absolute;
-  color: red;
+  color: #d50032;
   font-size: 12px;
   bottom: 10px;
   left: 0;
+  font-style: italic;
 }
 
 .form-field {
@@ -43,6 +44,6 @@
   }
 
   &.error {
-    border-color: red;
+    border-color: #d50032;
   }
 }
