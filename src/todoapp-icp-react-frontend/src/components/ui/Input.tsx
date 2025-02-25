@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, memo } from 'react';
-import FormFieldWrapper from './FormFieldWrapper';
 import clsx from 'clsx';
+import FormFieldWrapper from './FormFieldWrapper';
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { TextareaHTMLAttributes } from 'react';
+import { memo, TextareaHTMLAttributes } from 'react';
 import FormFieldWrapper from './FormFieldWrapper';
 
 interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -7,7 +7,11 @@ interface ITextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
 }
 
-const TextArea: React.FC<ITextAreaProps> = ({ label, error, ...props }) => {
+const TextAreaComponent: React.FC<ITextAreaProps> = ({
+  label,
+  error,
+  ...props
+}) => {
   return (
     <FormFieldWrapper label={label || ''} error={error}>
       <textarea
@@ -17,5 +21,7 @@ const TextArea: React.FC<ITextAreaProps> = ({ label, error, ...props }) => {
     </FormFieldWrapper>
   );
 };
+
+const TextArea = memo(TextAreaComponent);
 
 export default TextArea;

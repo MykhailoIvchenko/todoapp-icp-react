@@ -3,9 +3,8 @@ import { useSelectUser } from '../../redux/hooks/selectHooks/useSelectUser';
 import { TaskStatus } from '../../utils/enums';
 import Button from '../ui/Button';
 import Todo from './Todo';
+import AddTodoForm from '../AddTodoForm';
 import Modal from '../ui/Modal';
-import Input from '../ui/Input';
-import TextArea from '../ui/TextArea';
 
 const mockedTodos = [
   {
@@ -65,7 +64,7 @@ const mockedTodos = [
 ];
 
 const TodosPage: React.FC = () => {
-  const [showAddModal, setShowAddModal] = useState<boolean>(true);
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
 
   const openModal = () => {
     setShowAddModal(true);
@@ -91,8 +90,9 @@ const TodosPage: React.FC = () => {
           </header>
 
           <section className='todos-page__main'>
-            {mockedTodos.map((todo) => (
+            {mockedTodos.map((todo, i) => (
               <Todo
+                key={i}
                 title={todo.title}
                 description={todo.description}
                 status={todo.status as TaskStatus}
@@ -107,7 +107,7 @@ const TodosPage: React.FC = () => {
 
         {showAddModal && (
           <Modal isOpen={showAddModal} onClose={closeModal}>
-            <></>
+            <AddTodoForm externalAction={closeModal} />
           </Modal>
         )}
       </div>
