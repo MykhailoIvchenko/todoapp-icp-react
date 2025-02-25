@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import infinityIcon from '../assets/img/ic.svg';
+import infinityIcon from '../../assets/img/ic.svg';
 
 interface ILoaderProps {
   isSmall?: boolean;

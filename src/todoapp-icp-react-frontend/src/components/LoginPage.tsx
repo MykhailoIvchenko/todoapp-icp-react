@@ -1,8 +1,8 @@
 import { useInternetIdentity } from 'ic-use-internet-identity';
-import Loader from './Loader';
+import Loader from './ui/Loader';
 import { useEffect } from 'react';
 import usePrincipalIdDispatch from '../redux/hooks/dispatchHooks/usePrincipalIdDispatch';
-import Button from './Button';
+import Button from './ui/Button';
 
 const LoginPage: React.FC = () => {
   const { login, loginStatus, identity } = useInternetIdentity();

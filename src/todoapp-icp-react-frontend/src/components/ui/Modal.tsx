@@ -1,5 +1,5 @@
 import { memo, ReactNode } from 'react';
-import closeIcon from '../assets/img/close-icon.svg';
+import closeIcon from '../../assets/img/close-icon.svg';
 
 interface IModalProps {
   children: ReactNode | ReactNode[];

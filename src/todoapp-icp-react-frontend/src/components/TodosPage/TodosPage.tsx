@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useSelectUser } from '../../redux/hooks/selectHooks/useSelectUser';
 import { TaskStatus } from '../../utils/enums';
-import Button from '../Button';
+import Button from '../ui/Button';
 import Todo from './Todo';
-import Modal from '../Modal';
+import Modal from '../ui/Modal';
+import Input from '../ui/Input';
 
 const mockedTodos = [
   {
@@ -65,6 +66,10 @@ const mockedTodos = [
 const TodosPage: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState<boolean>(true);
 
+  const openModal = () => {
+    setShowAddModal(true);
+  };
+
   const closeModal = useCallback(() => {
     setShowAddModal(false);
   }, []);
@@ -81,7 +86,7 @@ const TodosPage: React.FC = () => {
               What needs to be done?
             </span>
 
-            <Button text='Add' />
+            <Button text='Add' onClick={openModal} />
           </header>
 
           <section className='todos-page__main'>
@@ -101,7 +106,7 @@ const TodosPage: React.FC = () => {
 
         {showAddModal && (
           <Modal isOpen={showAddModal} onClose={closeModal}>
-            Add task
+            <></>
           </Modal>
         )}
       </div>

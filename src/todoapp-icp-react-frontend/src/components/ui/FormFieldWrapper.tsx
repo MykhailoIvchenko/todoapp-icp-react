@@ -2,7 +2,7 @@ import { memo, ReactNode } from 'react';
 
 interface IFormFieldWrapperProps {
   children: ReactNode | ReactNode[];
-  error: string;
+  error?: string;
   label: string;
 }
 
@@ -12,12 +12,12 @@ const FormFieldWrapperComponent: React.FC<IFormFieldWrapperProps> = ({
   label,
 }) => {
   return (
-    <label className='form-field'>
-      <span className='label-text'>{label}</span>
+    <label className='form-field-wrapper'>
+      {label && <span className='label-text'>{label}</span>}
 
       {children}
 
-      {error && <span className='error-text'></span>}
+      {error && <span className='error-text'>{error}</span>}
     </label>
   );
 };
