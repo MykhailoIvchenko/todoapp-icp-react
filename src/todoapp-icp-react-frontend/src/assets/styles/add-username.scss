@@ -1,0 +1,25 @@
+.add-username {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #292828;
+
+  &_title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: white;
+  }
+}
+
+.username-form {
+  width: 300px;
+
+  &_button {
+    width: 100%;
+  }
+}
