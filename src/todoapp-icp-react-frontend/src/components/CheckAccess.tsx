@@ -10,9 +10,9 @@ const CheckAccess = () => {
     return <LoginPage />;
   }
 
-  if (!user.username) {
-    return <AddUserName />;
-  }
+  // if (!user.username) {
+  //   return <AddUserName />;
+  // }
 
   return <TodosPage />;
 };

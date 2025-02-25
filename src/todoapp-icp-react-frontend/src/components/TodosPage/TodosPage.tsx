@@ -5,6 +5,7 @@ import Button from '../ui/Button';
 import Todo from './Todo';
 import AddTodoForm from '../AddTodoForm';
 import Modal from '../ui/Modal';
+import { useDfinityAgent } from '../../hooks/useDfinityAgent';
 
 const mockedTodos = [
   {
@@ -75,6 +76,8 @@ const TodosPage: React.FC = () => {
   }, []);
 
   const user = useSelectUser();
+
+  useDfinityAgent();
 
   return (
     <div className='todos-page-container'>
