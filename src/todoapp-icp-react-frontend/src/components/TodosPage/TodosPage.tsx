@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
 import { useSelectUser } from '../../redux/hooks/selectHooks/useSelectUser';
 import { TaskStatus } from '../../utils/enums';
-import Button from '../Button';
+import Button from '../ui/Button';
 import Todo from './Todo';
-import Modal from '../Modal';
+import AddTodoForm from '../AddTodoForm';
+import Modal from '../ui/Modal';
 
 const mockedTodos = [
   {
@@ -63,6 +64,16 @@ const mockedTodos = [
 ];
 
 const TodosPage: React.FC = () => {
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
+
+  const openModal = () => {
+    setShowAddModal(true);
+  };
+
+  const closeModal = useCallback(() => {
+    setShowAddModal(false);
+  }, []);
+
   const user = useSelectUser();
 
   return (
@@ -75,12 +86,13 @@ const TodosPage: React.FC = () => {
               What needs to be done?
             </span>
 
-            <Button text='Add' />
+            <Button text='Add' onClick={openModal} />
           </header>
 
           <section className='todos-page__main'>
-            {mockedTodos.map((todo) => (
+            {mockedTodos.map((todo, i) => (
               <Todo
+                key={i}
                 title={todo.title}
                 description={todo.description}
                 status={todo.status as TaskStatus}
@@ -89,9 +101,15 @@ const TodosPage: React.FC = () => {
           </section>
 
           <footer className='todos-page__footer'>
-            <span className='todo-count'>3 items left</span>
+            <span className='todo-count'>{mockedTodos.length} items left</span>
           </footer>
         </div>
+
+        {showAddModal && (
+          <Modal isOpen={showAddModal} onClose={closeModal}>
+            <AddTodoForm externalAction={closeModal} />
+          </Modal>
+        )}
       </div>
     </div>
   );

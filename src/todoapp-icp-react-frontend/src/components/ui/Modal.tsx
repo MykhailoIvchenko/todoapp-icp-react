@@ -1,5 +1,5 @@
 import { memo, ReactNode } from 'react';
-import closeIcon from '../assets/img/close-icon.svg';
+import closeIcon from '../../assets/img/close-icon.svg';
 
 interface IModalProps {
   children: ReactNode | ReactNode[];
@@ -15,7 +15,7 @@ const ModalComponent: React.FC<IModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className='modal' onClick={onClose}>
+    <div className={'modal'} onClick={onClose}>
       <div className='modal-content' onClick={(e) => e.stopPropagation()}>
         <button className='close-btn' onClick={onClose}>
           <img src={closeIcon} alt='Close icon' />

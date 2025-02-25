@@ -4,6 +4,10 @@ body {
   overflow-y: hidden;
 }
 
+textarea {
+  resize: vertical;
+}
+
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
 @supports not selector(::-webkit-scrollbar) {
@@ -39,4 +43,6 @@ body {
 @import url('./login.scss');
 @import url('./todo.scss');
 @import url('./todos-page.scss');
-@import url(./modal.scss);
+@import url('./modal.scss');
+@import url('./form-field.scss');
+@import url('./add-todo-form.scss');
