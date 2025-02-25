@@ -1,7 +1,7 @@
 body {
-  min-width: 320px;
-  max-width: 920px;
-  margin: 0 auto;
+  height: 100vh;
+  margin: 0;
+  overflow-y: hidden;
 }
 
 /* ===== Scrollbar CSS ===== */
@@ -33,9 +33,10 @@ body {
   border: none;
 }
 
-@import './reset.scss';
-@import './loader.scss';
-@import './button.scss';
-@import './login.scss';
-@import './todo.scss';
-@import './todos-page.scss';
+@import url('./reset.scss');
+@import url('./loader.scss');
+@import url('./button.scss');
+@import url('./login.scss');
+@import url('./todo.scss');
+@import url('./todos-page.scss');
+@import url(./modal.scss);

@@ -26,11 +26,6 @@ const Todo: React.FC<ITodoProps> = ({ title, description, status }) => {
       <button type='button' className='todo__remove'>
         ×
       </button>
-
-      <div className='modal overlay'>
-        <div className='modal-background has-background-white-ter' />
-        <div className='loader' />
-      </div>
     </div>
   );
 };
