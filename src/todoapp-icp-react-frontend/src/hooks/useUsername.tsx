@@ -28,9 +28,7 @@ export const useUserName: UseUsername = () => {
       setIsLoading(true);
 
       if (principalId && actor) {
-        const principal = Principal.fromText(principalId);
-
-        // const username = await actor.get_uername();
+        // const username = (await actor.get_uername()) as string[];
         const username = await todoapp_icp_react_backend.get_username();
 
         if (username.length > 0 && username[0]) {

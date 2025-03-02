@@ -31,11 +31,7 @@ export const useTasksList: UseTasksList = () => {
       setTasks(userTasks);
 
       // if (principalId && actor) {
-      //   const principal = Principal.fromText(principalId);
-
-      //   // const userTasks: ITask[] = (await actor.get_user_tasks(
-      //   //   principalId
-      //   // )) as ITask[];
+      //   const userTasks: ITask[] = (await actor.get_user_tasks()) as ITask[];
 
       //   setTasks(userTasks);
       // }
