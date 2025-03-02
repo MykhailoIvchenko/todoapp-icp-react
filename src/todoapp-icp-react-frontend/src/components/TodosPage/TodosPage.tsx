@@ -5,64 +5,8 @@ import Button from '../ui/Button';
 import Todo from './Todo';
 import AddTodoForm from '../AddTodoForm';
 import Modal from '../ui/Modal';
-import { useDfinityAgent } from '../../hooks/useDfinityAgent';
-
-const mockedTodos = [
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-  {
-    title: 'First todo',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium assumenda dolor numquam mollitia quae quas eaque cumque rem explicabo pariatur.',
-    status: 'notCompleted',
-  },
-];
+import { useTasksList } from '../../hooks/useTasksList';
+import Loader from '../ui/Loader';
 
 const TodosPage: React.FC = () => {
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
@@ -76,6 +20,12 @@ const TodosPage: React.FC = () => {
   }, []);
 
   const user = useSelectUser();
+
+  const { tasks, isLoading } = useTasksList();
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className='todos-page-container'>
@@ -91,18 +41,23 @@ const TodosPage: React.FC = () => {
           </header>
 
           <section className='todos-page__main'>
-            {mockedTodos.map((todo, i) => (
+            {tasks.map((task, i) => (
               <Todo
-                key={i}
-                title={todo.title}
-                description={todo.description}
-                status={todo.status as TaskStatus}
+                key={task.taskId}
+                id={task.taskId}
+                title={task.title}
+                description={task.description}
+                status={
+                  task.status.notCompleted === null
+                    ? TaskStatus.NotCompleted
+                    : TaskStatus.Completed
+                }
               />
             ))}
           </section>
 
           <footer className='todos-page__footer'>
-            <span className='todo-count'>{mockedTodos.length} items left</span>
+            <span className='todo-count'>{tasks.length} items left</span>
           </footer>
         </div>
 

@@ -5,6 +5,7 @@ import List "mo:base/List";
 import Time "mo:base/Time";
 import Bool "mo:base/Bool";
 import Types "./Types";
+import Debug "mo:base/Debug";
 
 shared({ caller }) actor class() {
   stable var usernames : AssocList.AssocList<Principal, Text> = List.nil();
@@ -29,8 +30,12 @@ shared({ caller }) actor class() {
     return first_task_id == second_task_id;
   };
 
-  public func get_username(user: Principal) : async ?Text {
-    AssocList.find<Principal, Text>(usernames, user, principal_eq);
+  public query func get_username() : async ?Text {
+    Debug.print("Got request");
+    Debug.print(Principal.toText(caller));
+    let result = AssocList.find<Principal, Text>(usernames, caller, principal_eq);
+
+    return result;
   };
 
   public func set_username(new_username: Text) : () {
@@ -77,7 +82,7 @@ shared({ caller }) actor class() {
     last_id += 1;
     let task_id = last_id;
 
-    let user_name = await get_username(caller);
+    let user_name = await get_username();
 
     let new_task = {
       title = title;
