@@ -2,6 +2,7 @@ import { Actor, ActorMethod, ActorSubclass, HttpAgent } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
 import { useInternetIdentity } from 'ic-use-internet-identity';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 type UseDfinityAgent = () => ActorSubclass<
   Record<string, ActorMethod<unknown[], unknown>>
@@ -77,7 +78,7 @@ export const useDfinityAgent: UseDfinityAgent = () => {
 
       setActor(generatedActor);
     } catch (error) {
-      console.log(error);
+      toast.error('An error occured during the agent initialization');
     }
   };
 

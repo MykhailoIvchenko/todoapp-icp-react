@@ -4,6 +4,7 @@ import { useSelectUser } from '../redux/hooks/selectHooks/useSelectUser';
 import { Principal } from '@dfinity/principal';
 import { useDfinityAgent } from './useDfinityAgent';
 import { todoapp_icp_react_backend } from '../../../declarations/todoapp-icp-react-backend';
+import { toast } from 'react-toastify';
 
 type UseTasksList = () => {
   tasks: ITask[];
@@ -24,7 +25,8 @@ export const useTasksList: UseTasksList = () => {
     try {
       setIsLoading(true);
 
-      const userTasks: ITask[] = await todoapp_icp_react_backend.get_user_tasks();
+      const userTasks: ITask[] =
+        await todoapp_icp_react_backend.get_user_tasks();
 
       setTasks(userTasks);
 
@@ -38,7 +40,7 @@ export const useTasksList: UseTasksList = () => {
       //   setTasks(userTasks);
       // }
     } catch (error) {
-      console.log(error);
+      toast.error('An error occured during the tasks list retreiving');
     } finally {
       setIsLoading(false);
     }
