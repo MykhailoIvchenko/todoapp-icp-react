@@ -28,45 +28,42 @@ const TodosPage: React.FC = () => {
   }
 
   return (
-    <div className='todos-page-container'>
-      <div className='todos-page'>
-        <h1 className='todos-page__title'>{user?.username || 'Anonymous'}</h1>
-        <div className='todos-page__content'>
-          <header className='todos-page__header'>
-            <span className='todos-page__list-title'>
-              What needs to be done?
-            </span>
+    <div className='todos-list'>
+      <h1 className='todos-list__title'>{user?.username || 'Anonymous'}</h1>
 
-            <Button text='Add' onClick={openModal} />
-          </header>
+      <div className='todos-list__content'>
+        <header className='todos-list__header'>
+          <span className='todos-list__list-title'>What needs to be done?</span>
 
-          <section className='todos-page__main'>
-            {tasks.map((task, i) => (
-              <Todo
-                key={task.taskId}
-                id={task.taskId}
-                title={task.title}
-                description={task.description}
-                status={
-                  task.status.notCompleted === null
-                    ? TaskStatus.NotCompleted
-                    : TaskStatus.Completed
-                }
-              />
-            ))}
-          </section>
+          <Button text='Add' onClick={openModal} />
+        </header>
 
-          <footer className='todos-page__footer'>
-            <span className='todo-count'>{tasks.length} items left</span>
-          </footer>
-        </div>
+        <section className='todos-list__main'>
+          {tasks.map((task, i) => (
+            <Todo
+              key={task.taskId}
+              id={task.taskId}
+              title={task.title}
+              description={task.description}
+              status={
+                task.status.notCompleted === null
+                  ? TaskStatus.NotCompleted
+                  : TaskStatus.Completed
+              }
+            />
+          ))}
+        </section>
 
-        {showAddModal && (
-          <Modal isOpen={showAddModal} onClose={closeModal}>
-            <AddTodoForm externalAction={closeModal} />
-          </Modal>
-        )}
+        <footer className='todos-list__footer'>
+          <span>{tasks.length} items left</span>
+        </footer>
       </div>
+
+      {showAddModal && (
+        <Modal isOpen={showAddModal} onClose={closeModal}>
+          <AddTodoForm externalAction={closeModal} />
+        </Modal>
+      )}
     </div>
   );
 };

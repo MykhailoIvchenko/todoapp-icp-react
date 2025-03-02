@@ -3,6 +3,7 @@ import Input from './ui/Input';
 import Button from './ui/Button';
 import { useUserName } from '../hooks/useUsername';
 import Loader from './ui/Loader';
+
 interface IUserNameForm {
   username: string;
 }
@@ -23,15 +24,11 @@ const AddUserName: React.FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className='add-username'>
-        <Loader />
-      </div>
-    );
+    return <Loader />;
   }
 
   return (
-    <div className='add-username'>
+    <>
       <h3 className='add-username_title'>Add your username</h3>
 
       <form className='username-form' onSubmit={handleSubmit(saveUsername)}>
@@ -52,7 +49,7 @@ const AddUserName: React.FC = () => {
 
         <Button text={'Save'} addClasses='username-form_button' type='submit' />
       </form>
-    </div>
+    </>
   );
 };
 
