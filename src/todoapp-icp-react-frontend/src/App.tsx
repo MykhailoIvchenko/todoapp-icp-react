@@ -1,4 +1,5 @@
 import CheckAccess from './components/CheckAccess';
+import FallBackPage from './components/FallbackPage';
 
 function App() {
   return (
