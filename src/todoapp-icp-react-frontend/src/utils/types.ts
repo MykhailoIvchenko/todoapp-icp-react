@@ -1,4 +1,4 @@
-import { TaskStatus } from './enums';
+import { ReactNode } from 'react';
 
 export interface IUser {
   username?: string;
@@ -16,3 +16,5 @@ export interface ITask extends ITaskUpdatableData {
   username: string;
   status: Record<string, any>;
 }
+
+export type ReactChildren = ReactNode | ReactNode[];
