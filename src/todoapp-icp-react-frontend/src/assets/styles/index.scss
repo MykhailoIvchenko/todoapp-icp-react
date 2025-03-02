@@ -13,7 +13,7 @@ textarea {
 @supports not selector(::-webkit-scrollbar) {
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(175, 47, 47, 0.15);
+    scrollbar-color: #00e0ff;
   }
 }
 
@@ -32,7 +32,7 @@ textarea {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(175, 47, 47, 0.15);
+  background-color: #00e0ff;
   border-radius: 360px;
   border: none;
 }

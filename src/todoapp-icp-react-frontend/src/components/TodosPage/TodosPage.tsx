@@ -21,7 +21,7 @@ const TodosPage: React.FC = () => {
 
   const user = useSelectUser();
 
-  const { tasks, isLoading } = useTasksList();
+  const { tasks, isLoading, createTask, deleteTask } = useTasksList();
 
   if (isLoading) {
     return <Loader />;
@@ -50,6 +50,7 @@ const TodosPage: React.FC = () => {
                   ? TaskStatus.NotCompleted
                   : TaskStatus.Completed
               }
+              deleteTask={deleteTask}
             />
           ))}
         </section>
@@ -61,7 +62,7 @@ const TodosPage: React.FC = () => {
 
       {showAddModal && (
         <Modal isOpen={showAddModal} onClose={closeModal}>
-          <AddTodoForm externalAction={closeModal} />
+          <AddTodoForm externalAction={closeModal} createTask={createTask} />
         </Modal>
       )}
     </div>
