@@ -7,11 +7,11 @@ import { InternetIdentityProvider } from 'ic-use-internet-identity';
 import './assets/styles/index.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <InternetIdentityProvider>
-        <App />
-      </InternetIdentityProvider>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <InternetIdentityProvider>
+      <App />
+    </InternetIdentityProvider>
+  </Provider>
+  // </React.StrictMode>
 );

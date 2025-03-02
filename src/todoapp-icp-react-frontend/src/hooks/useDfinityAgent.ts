@@ -1,21 +1,28 @@
 import { Actor, ActorMethod, ActorSubclass, HttpAgent } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
 import { useInternetIdentity } from 'ic-use-internet-identity';
+import { useEffect, useState } from 'react';
 
 type UseDfinityAgent = () => ActorSubclass<
   Record<string, ActorMethod<unknown[], unknown>>
 > | null;
 
-const host = 'http://127.0.0.1:4943'; //TODO: Change it in prod
+const host = 'http://127.0.0.1:4943';
+// //TODO: Change it in prod
+// const host = 'localhost:4943';
 
 const canisterId = import.meta.env.VITE_CANISTER_ID_BACKEND;
 
 export const useDfinityAgent: UseDfinityAgent = () => {
   const { identity } = useInternetIdentity();
 
+  const [actor, setActor] = useState<ActorSubclass<
+    Record<string, ActorMethod<unknown[], unknown>>
+  > | null>(null);
+
   const idlFactory = ({ IDL }: { IDL: any }) =>
     IDL.Service({
-      get_username: IDL.Func([IDL.Principal], [IDL.Opt(IDL.Text)], ['query']),
+      get_username: IDL.Func([], [IDL.Opt(IDL.Text)], ['query']),
       get_user_tasks: IDL.Func(
         [],
         [
@@ -54,10 +61,29 @@ export const useDfinityAgent: UseDfinityAgent = () => {
     return null;
   }
 
-  const actor = Actor.createActor(idlFactory, {
-    agent: HttpAgent.createSync({ identity }),
-    canisterId: Principal.fromText(canisterId),
-  });
+  const getActorAndSet = async () => {
+    try {
+      const agent = await HttpAgent.create({
+        host: 'http://127.0.0.1:4943',
+        identity,
+      });
+
+      await agent.fetchRootKey();
+
+      const generatedActor = Actor.createActor(idlFactory, {
+        agent,
+        canisterId: Principal.fromText(canisterId),
+      });
+
+      setActor(generatedActor);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getActorAndSet();
+  }, []);
 
   return actor;
 };

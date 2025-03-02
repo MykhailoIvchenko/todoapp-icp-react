@@ -11,5 +11,8 @@ export interface ITaskUpdatableData {
 }
 
 export interface ITask extends ITaskUpdatableData {
-  status: TaskStatus;
+  createdAt: bigint;
+  taskId: bigint;
+  username: string;
+  status: Record<string, any>;
 }

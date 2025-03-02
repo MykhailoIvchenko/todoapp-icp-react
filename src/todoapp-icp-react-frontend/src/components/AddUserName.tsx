@@ -1,7 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
 import Input from './ui/Input';
 import Button from './ui/Button';
-
 interface IUserNameForm {
   username: string;
 }

@@ -2,12 +2,15 @@ import React from 'react';
 import { TaskStatus } from '../../utils/enums';
 
 interface ITodoProps {
+  id: bigint;
   title: string;
   description: string;
   status: TaskStatus;
 }
 
-const Todo: React.FC<ITodoProps> = ({ title, description, status }) => {
+const Todo: React.FC<ITodoProps> = ({ id, title, description, status }) => {
+  const handleDelete = async () => {};
+
   return (
     <div className='todo'>
       <label className='todo__status-label' title={'Make completed'}>
@@ -23,7 +26,7 @@ const Todo: React.FC<ITodoProps> = ({ title, description, status }) => {
 
         <span className='todo__description'>{description}</span>
       </div>
-      <button type='button' className='todo__remove'>
+      <button type='button' className='todo__remove' onClick={handleDelete}>
         ×
       </button>
     </div>
