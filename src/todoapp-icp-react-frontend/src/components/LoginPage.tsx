@@ -21,13 +21,13 @@ const LoginPage: React.FC = () => {
   }, [identity]);
 
   return (
-    <div className='login-page'>
+    <>
       {loginStatus == 'logging-in' || (!!identity && loginStatus == 'idle') ? (
         <Loader />
       ) : (
         <Button text={'Login'} addClasses={'login-button'} onClick={login} />
       )}
-    </div>
+    </>
   );
 };
 

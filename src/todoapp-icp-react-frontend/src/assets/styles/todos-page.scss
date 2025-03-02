@@ -1,27 +1,23 @@
-.todos-page-container {
-  min-width: 320px;
-  max-width: 920px;
-  margin: 0 auto;
-}
-
-.todos-page {
+.todos-list {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 24px;
   font-weight: 300;
   color: #4d4d4d;
-  margin: 40px 20px;
+  min-width: 400px;
+  width: 70vw;
 
   &__content {
     margin-bottom: 20px;
     background: #fff;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3),
+      0 10px 25px rgba(0, 0, 0, 0.6);
   }
 
   &__title {
     font-size: 80px;
     font-weight: 100;
     text-align: center;
-    color: rgba(175, 47, 47, 0.15);
+    color: #fff;
     -webkit-text-rendering: optimizeLegibility;
     -moz-text-rendering: optimizeLegibility;
     text-rendering: optimizeLegibility;
@@ -29,7 +25,7 @@
 
   &__header {
     position: relative;
-    padding: 0 60px;
+    padding-inline: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -38,7 +34,6 @@
   &__list-title {
     width: 100%;
     padding: 16px 0;
-
     font-size: 24px;
     line-height: 1.4em;
     font-family: inherit;
@@ -46,10 +41,7 @@
     color: inherit;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
     border: none;
-    background: rgba(0, 0, 0, 0.01);
-    box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 
     &::placeholder {
       font-style: italic;
@@ -60,17 +52,6 @@
 
   &__add-button {
     width: 200px;
-    background: linear-gradient(90deg, #ff00ff, #00e0ff);
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 15px 40px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
-    transition: all 0.3s ease-in-out;
-    text-transform: uppercase;
   }
 
   &__main {
