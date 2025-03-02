@@ -23,7 +23,11 @@ const AddUserName: React.FC = () => {
   };
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className='add-username'>
+        <Loader />
+      </div>
+    );
   }
 
   return (

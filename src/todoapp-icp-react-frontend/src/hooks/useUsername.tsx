@@ -17,7 +17,7 @@ export const useUserName: UseUsername = () => {
 
   const setUsername = useUserNameDispatch();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const principalId = user?.principalId;
 
