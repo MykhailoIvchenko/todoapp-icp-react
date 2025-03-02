@@ -25,8 +25,6 @@ export const useTasksList: UseTasksList = () => {
 
   const getTasksAndSet = async () => {
     try {
-      setIsLoading(true);
-
       const userTasks: ITask[] =
         await todoapp_icp_react_backend.get_user_tasks();
 
@@ -73,6 +71,8 @@ export const useTasksList: UseTasksList = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getTasksAndSet();
   }, []);
 

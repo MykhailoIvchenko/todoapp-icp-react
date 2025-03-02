@@ -1,17 +1,22 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ITaskUpdatableData } from '../utils/types';
 import Button from './ui/Button';
 import Input from './ui/Input';
 import TextArea from './ui/TextArea';
+import Loader from './ui/Loader';
 
 interface IAddTodoFormProps {
+  createTask: (title: string, description: string) => Promise<void>;
   externalAction: VoidFunction;
 }
 
 const AddTodoFormComponent: React.FC<IAddTodoFormProps> = ({
   externalAction,
+  createTask,
 }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const {
     control,
     formState: { errors },
@@ -19,7 +24,13 @@ const AddTodoFormComponent: React.FC<IAddTodoFormProps> = ({
   } = useForm<ITaskUpdatableData>();
 
   const saveTask = async (taskData: ITaskUpdatableData) => {
+    setIsLoading(true);
+
+    await createTask(taskData.title, taskData.description);
+
     externalAction();
+
+    setIsLoading(false);
   };
 
   return (
@@ -59,7 +70,15 @@ const AddTodoFormComponent: React.FC<IAddTodoFormProps> = ({
         )}
       />
 
-      <Button text={'Create'} addClasses='add-todo-form_button' type='submit' />
+      {isLoading ? (
+        <Loader isSmall />
+      ) : (
+        <Button
+          text={'Create'}
+          addClasses='add-todo-form_button'
+          type='submit'
+        />
+      )}
     </form>
   );
 };
