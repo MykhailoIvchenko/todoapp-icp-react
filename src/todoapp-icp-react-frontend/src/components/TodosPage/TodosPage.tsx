@@ -21,7 +21,7 @@ const TodosPage: React.FC = () => {
 
   const user = useSelectUser();
 
-  const { tasks, isLoading, createTask, deleteTask } = useTasksList();
+  const { tasks, isLoading, createTask, deleteTask, setTasks } = useTasksList();
 
   if (isLoading) {
     return <Loader />;

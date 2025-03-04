@@ -3,7 +3,7 @@ import { Principal } from '@dfinity/principal';
 import { useInternetIdentity } from 'ic-use-internet-identity';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { idlFactory } from '../../../declarations/todoapp-icp-react-frontend';
+// import { idlFactory } from '../../../declarations/todoapp-icp-react-frontend';
 
 type UseDfinityAgent = () => ActorSubclass<
   Record<string, ActorMethod<unknown[], unknown>>
@@ -22,42 +22,42 @@ export const useDfinityAgent: UseDfinityAgent = () => {
     Record<string, ActorMethod<unknown[], unknown>>
   > | null>(null);
 
-  // const idlFactory = ({ IDL }: { IDL: any }) =>
-  //   IDL.Service({
-  //     get_username: IDL.Func([], [IDL.Opt(IDL.Text)], ['query']),
-  //     get_user_tasks: IDL.Func(
-  //       [],
-  //       [
-  //         IDL.Vec(
-  //           IDL.Record({
-  //             title: IDL.Text,
-  //             description: IDL.Text,
-  //             createdAt: IDL.Int,
-  //             userPrincipalId: IDL.Principal,
-  //             username: IDL.Text,
-  //             taskId: IDL.Nat,
-  //             status: IDL.Variant({ notCompleted: null, completed: null }),
-  //           })
-  //         ),
-  //       ],
-  //       ['query']
-  //     ),
-  //     create_task: IDL.Func(
-  //       [IDL.Text, IDL.Text],
-  //       [
-  //         IDL.Record({
-  //           title: IDL.Text,
-  //           description: IDL.Text,
-  //           createdAt: IDL.Int,
-  //           userPrincipalId: IDL.Principal,
-  //           username: IDL.Text,
-  //           taskId: IDL.Nat,
-  //           status: IDL.Variant({ notCompleted: null, completed: null }),
-  //         }),
-  //       ],
-  //       []
-  //     ),
-  //   });
+  const idlFactory = ({ IDL }: { IDL: any }) =>
+    IDL.Service({
+      get_username: IDL.Func([], [IDL.Opt(IDL.Text)], ['query']),
+      get_user_tasks: IDL.Func(
+        [],
+        [
+          IDL.Vec(
+            IDL.Record({
+              title: IDL.Text,
+              description: IDL.Text,
+              createdAt: IDL.Int,
+              userPrincipalId: IDL.Principal,
+              username: IDL.Text,
+              taskId: IDL.Nat,
+              status: IDL.Variant({ notCompleted: null, completed: null }),
+            })
+          ),
+        ],
+        ['query']
+      ),
+      create_task: IDL.Func(
+        [IDL.Text, IDL.Text],
+        [
+          IDL.Record({
+            title: IDL.Text,
+            description: IDL.Text,
+            createdAt: IDL.Int,
+            userPrincipalId: IDL.Principal,
+            username: IDL.Text,
+            taskId: IDL.Nat,
+            status: IDL.Variant({ notCompleted: null, completed: null }),
+          }),
+        ],
+        []
+      ),
+    });
 
   if (!identity) {
     return null;

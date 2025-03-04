@@ -26,9 +26,9 @@ const AddTodoFormComponent: React.FC<IAddTodoFormProps> = ({
   const saveTask = async (taskData: ITaskUpdatableData) => {
     setIsLoading(true);
 
-    await createTask(taskData.title, taskData.description);
-
     externalAction();
+    
+    await createTask(taskData.title, taskData.description);
 
     setIsLoading(false);
   };

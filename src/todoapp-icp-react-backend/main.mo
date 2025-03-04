@@ -31,8 +31,6 @@ shared({ caller }) actor class() {
   };
 
   public query func get_username() : async ?Text {
-    Debug.print("Got request");
-    Debug.print(Principal.toText(caller));
     let result = AssocList.find<Principal, Text>(usernames, caller, principal_eq);
 
     return result;

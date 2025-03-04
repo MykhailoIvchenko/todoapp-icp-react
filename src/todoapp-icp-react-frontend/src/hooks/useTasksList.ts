@@ -5,12 +5,14 @@ import { Principal } from '@dfinity/principal';
 import { useDfinityAgent } from './useDfinityAgent';
 import { todoapp_icp_react_backend } from '../../../declarations/todoapp-icp-react-backend';
 import { toast } from 'react-toastify';
+import { TaskStatus } from '../utils/enums';
 
 type UseTasksList = () => {
   tasks: ITask[];
   isLoading: boolean;
   createTask: (title: string, description: string) => Promise<void>;
   deleteTask: (id: bigint) => Promise<void>;
+  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
 };
 
 export const useTasksList: UseTasksList = () => {
@@ -28,6 +30,10 @@ export const useTasksList: UseTasksList = () => {
       const userTasks: ITask[] =
         await todoapp_icp_react_backend.get_user_tasks();
 
+      userTasks.sort(
+        (prev, next) => Number(next.createdAt) - Number(prev.createdAt)
+      );
+
       setTasks(userTasks);
 
       // if (principalId && actor) {
@@ -44,6 +50,20 @@ export const useTasksList: UseTasksList = () => {
 
   const createTask = useCallback(async (title: string, description: string) => {
     try {
+      const currentTime = Date.now();
+
+      setTasks((prev) => [
+        {
+          taskId: currentTime as unknown as bigint,
+          title,
+          description,
+          username: '',
+          status: { [TaskStatus.NotCompleted]: null },
+          createdAt: currentTime as unknown as bigint,
+        },
+        ...prev,
+      ]);
+
       // await actor?.create_task(title, description);
       await todoapp_icp_react_backend.create_task(title, description);
 
@@ -56,6 +76,8 @@ export const useTasksList: UseTasksList = () => {
 
   const deleteTask = useCallback(async (id: bigint) => {
     try {
+      setTasks((prev) => prev.filter((task) => task.taskId !== id));
+
       // await actor?.delete_task(id);
       await todoapp_icp_react_backend.delete_task(id);
 
@@ -77,5 +99,6 @@ export const useTasksList: UseTasksList = () => {
     isLoading,
     createTask,
     deleteTask,
+    setTasks,
   };
 };

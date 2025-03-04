@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelectUser } from '../redux/hooks/selectHooks/useSelectUser';
 import { useDfinityAgent } from './useDfinityAgent';
-import { Principal } from '@dfinity/principal';
 import useUserNameDispatch from '../redux/hooks/dispatchHooks/useUserNameDispatch';
 import { todoapp_icp_react_backend } from '../../../declarations/todoapp-icp-react-backend';
 import { toast } from 'react-toastify';
@@ -28,7 +27,7 @@ export const useUserName: UseUsername = () => {
       setIsLoading(true);
 
       if (principalId && actor) {
-        // const username = (await actor.get_uername()) as string[];
+        // const username = (await actor.get_username()) as string[];
         const username = await todoapp_icp_react_backend.get_username();
 
         if (username.length > 0 && username[0]) {
