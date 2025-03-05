@@ -45,10 +45,10 @@ export const useUserName: UseUsername = () => {
 
       if (principalId && actor) {
         await actor.set_username(newUsername);
+        setUsername(newUsername);
       }
-
-      await getUsernameAndSet();
     } catch (error) {
+      console.log(error);
       toast.error('An error occured during the username saving');
     } finally {
       setIsLoading(false);
