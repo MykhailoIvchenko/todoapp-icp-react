@@ -54,6 +54,7 @@ export const useDfinityAgent: UseDfinityAgent = () => {
         ],
         []
       ),
+      set_username: IDL.Func([IDL.Text], [], []),
     });
 
   if (!identity) {
