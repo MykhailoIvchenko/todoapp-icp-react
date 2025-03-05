@@ -1,32 +1,4 @@
-.login-page {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #292828;
-}
-
 .login-button {
   width: 200px;
-  background: linear-gradient(90deg, #ff00ff, #00e0ff);
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 15px 40px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
-  transition: all 0.3s ease-in-out;
-  text-transform: uppercase;
-}
-
-.login-button:hover {
-  box-shadow: 0 0 25px rgba(0, 224, 255, 0.8);
-  transform: scale(1.01);
-}
-
-.login-button:active {
-  transform: scale(0.98);
+  height: 50px;
 }

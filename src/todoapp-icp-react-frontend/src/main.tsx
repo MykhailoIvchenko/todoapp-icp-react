@@ -4,14 +4,20 @@ import App from './App';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { InternetIdentityProvider } from 'ic-use-internet-identity';
+import { ErrorBoundary } from 'react-error-boundary';
+import FallBackPage from './components/FallbackPage';
+import ToastProvider from './components/ToastProvider';
 import './assets/styles/index.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <ErrorBoundary fallbackRender={FallBackPage}>
     <Provider store={store}>
       <InternetIdentityProvider>
         <App />
+        <ToastProvider />
       </InternetIdentityProvider>
     </Provider>
-  </React.StrictMode>
+  </ErrorBoundary>
+  // </React.StrictMode>
 );
