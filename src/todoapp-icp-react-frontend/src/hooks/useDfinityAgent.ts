@@ -3,15 +3,12 @@ import { Principal } from '@dfinity/principal';
 import { useInternetIdentity } from 'ic-use-internet-identity';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-// import { idlFactory } from '../../../declarations/todoapp-icp-react-frontend';
 
 type UseDfinityAgent = () => ActorSubclass<
   Record<string, ActorMethod<unknown[], unknown>>
 > | null;
 
-const host = 'http://127.0.0.1:4943';
-// //TODO: Change it in prod
-// const host = 'localhost:4943';
+const host = 'https://icp-api.io';
 
 const canisterId = import.meta.env.VITE_CANISTER_ID_BACKEND;
 
@@ -66,11 +63,9 @@ export const useDfinityAgent: UseDfinityAgent = () => {
   const getActorAndSet = async () => {
     try {
       const agent = await HttpAgent.create({
-        host: 'http://127.0.0.1:4943',
+        host,
         identity,
       });
-
-      await agent.fetchRootKey();
 
       const generatedActor = Actor.createActor(idlFactory, {
         agent,

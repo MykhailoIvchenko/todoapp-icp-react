@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ITask } from '../utils/types';
 import { useSelectUser } from '../redux/hooks/selectHooks/useSelectUser';
-import { Principal } from '@dfinity/principal';
 import { useDfinityAgent } from './useDfinityAgent';
-import { todoapp_icp_react_backend } from '../../../declarations/todoapp-icp-react-backend';
 import { toast } from 'react-toastify';
 import { TaskStatus } from '../utils/enums';
 
@@ -27,20 +25,15 @@ export const useTasksList: UseTasksList = () => {
 
   const getTasksAndSet = async () => {
     try {
-      const userTasks: ITask[] =
-        await todoapp_icp_react_backend.get_user_tasks();
+      if (principalId && actor) {
+        const userTasks: ITask[] = (await actor.get_user_tasks()) as ITask[];
 
-      userTasks.sort(
-        (prev, next) => Number(next.createdAt) - Number(prev.createdAt)
-      );
+        userTasks.sort(
+          (prev, next) => Number(next.createdAt) - Number(prev.createdAt)
+        );
 
-      setTasks(userTasks);
-
-      // if (principalId && actor) {
-      //   const userTasks: ITask[] = (await actor.get_user_tasks()) as ITask[];
-
-      //   setTasks(userTasks);
-      // }
+        setTasks(userTasks);
+      }
     } catch (error) {
       toast.error('An error occured during the tasks list retreiving');
     } finally {
@@ -64,8 +57,7 @@ export const useTasksList: UseTasksList = () => {
         ...prev,
       ]);
 
-      // await actor?.create_task(title, description);
-      await todoapp_icp_react_backend.create_task(title, description);
+      await actor?.create_task(title, description);
 
       toast.success('Congratulations! The task was created');
       await getTasksAndSet();
@@ -78,8 +70,7 @@ export const useTasksList: UseTasksList = () => {
     try {
       setTasks((prev) => prev.filter((task) => task.taskId !== id));
 
-      // await actor?.delete_task(id);
-      await todoapp_icp_react_backend.delete_task(id);
+      await actor?.delete_task(id);
 
       toast.info('The task was deleted');
       await getTasksAndSet();
