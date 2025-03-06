@@ -10,7 +10,6 @@ type UseTasksList = () => {
   isLoading: boolean;
   createTask: (title: string, description: string) => Promise<void>;
   deleteTask: (id: bigint) => Promise<void>;
-  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
 };
 
 export const useTasksList: UseTasksList = () => {
@@ -26,7 +25,7 @@ export const useTasksList: UseTasksList = () => {
   const getTasksAndSet = async () => {
     try {
       if (principalId && actor) {
-        const userTasks: ITask[] = (await actor.get_user_tasks()) as ITask[];
+        let userTasks: ITask[] = (await actor.get_user_tasks()) as ITask[];
 
         userTasks.sort(
           (prev, next) => Number(next.createdAt) - Number(prev.createdAt)
@@ -35,61 +34,74 @@ export const useTasksList: UseTasksList = () => {
         setTasks(userTasks);
       }
     } catch (error) {
+      console.log(error);
       toast.error('An error occured during the tasks list retreiving');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const createTask = useCallback(async (title: string, description: string) => {
-    try {
-      const currentTime = Date.now();
+  const createTask = useCallback(
+    async (title: string, description: string) => {
+      try {
+        const currentTime = Date.now();
 
-      setTasks((prev) => [
-        {
-          taskId: currentTime as unknown as bigint,
+        setTasks((prev) => [
+          {
+            taskId: currentTime as unknown as bigint,
+            title,
+            description,
+            username: '',
+            status: { [TaskStatus.NotCompleted]: null },
+            createdAt: currentTime as unknown as bigint,
+          },
+          ...prev,
+        ]);
+
+        await actor?.create_task(
           title,
           description,
-          username: '',
-          status: { [TaskStatus.NotCompleted]: null },
-          createdAt: currentTime as unknown as bigint,
-        },
-        ...prev,
-      ]);
+          user?.username || 'Uknown'
+        );
 
-      await actor?.create_task(title, description);
+        toast.success('Congratulations! The task was created');
+        await getTasksAndSet();
+      } catch (error) {
+        toast.error('Something went wrong during the task creation');
+      }
+    },
+    [actor]
+  );
 
-      toast.success('Congratulations! The task was created');
-      await getTasksAndSet();
-    } catch {
-      toast.error('Something went wrong during the task creation');
-    }
-  }, []);
+  const deleteTask = useCallback(
+    async (id: bigint) => {
+      try {
+        setTasks((prev) => prev.filter((task) => task.taskId !== id));
 
-  const deleteTask = useCallback(async (id: bigint) => {
-    try {
-      setTasks((prev) => prev.filter((task) => task.taskId !== id));
+        await actor?.delete_task(id);
 
-      await actor?.delete_task(id);
-
-      toast.info('The task was deleted');
-      await getTasksAndSet();
-    } catch {
-      toast.error('Something went wrong during the task deletion');
-    }
-  }, []);
+        toast.info('The task was deleted');
+        await getTasksAndSet();
+      } catch (error) {
+        console.log(error);
+        toast.error('Something went wrong during the task deletion');
+      }
+    },
+    [actor]
+  );
 
   useEffect(() => {
     setIsLoading(true);
 
-    getTasksAndSet();
-  }, []);
+    if (actor) {
+      getTasksAndSet();
+    }
+  }, [actor]);
 
   return {
     tasks,
     isLoading,
     createTask,
     deleteTask,
-    setTasks,
   };
 };

@@ -5,7 +5,7 @@ module Types {
         title : Text;
         description : Text;
         createdAt : Int;
-        userPrincipalId : Principal;
+        userPrincipalId : Text;
         username : Text;
         taskId : Nat;
         status : Status;
