@@ -13,7 +13,7 @@ type UseTasksList = () => {
 };
 
 export const useTasksList: UseTasksList = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [tasks, setTasks] = useState<ITask[]>([]);
 
   const actor = useDfinityAgent();
@@ -23,8 +23,8 @@ export const useTasksList: UseTasksList = () => {
   const principalId = user?.principalId;
 
   const getTasksAndSet = async () => {
-    try {
-      if (principalId && actor) {
+    if (principalId && actor) {
+      try {
         let userTasks: ITask[] = (await actor.get_user_tasks()) as ITask[];
 
         userTasks.sort(
@@ -32,12 +32,11 @@ export const useTasksList: UseTasksList = () => {
         );
 
         setTasks(userTasks);
+      } catch (error) {
+        toast.error('An error occured during the tasks list retreiving');
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occured during the tasks list retreiving');
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -83,7 +82,6 @@ export const useTasksList: UseTasksList = () => {
         toast.info('The task was deleted');
         await getTasksAndSet();
       } catch (error) {
-        console.log(error);
         toast.error('Something went wrong during the task deletion');
       }
     },
@@ -91,12 +89,10 @@ export const useTasksList: UseTasksList = () => {
   );
 
   useEffect(() => {
-    setIsLoading(true);
-
-    if (actor) {
+    if (principalId && actor) {
       getTasksAndSet();
     }
-  }, [actor]);
+  }, [actor, principalId]);
 
   return {
     tasks,
