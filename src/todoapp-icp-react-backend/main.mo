@@ -35,17 +35,13 @@ actor {
     return first_task_id == second_task_id;
   };
 
-  public query (msg) func get_username() : async ?Text {
-    let caller = msg.caller;
-
+  public query ({ caller }) func get_username() : async ?Text {
     let result = AssocList.find<Text, Text>(usernames, Principal.toText(caller), principal_eq);
 
     return result;
   };
 
-  public shared (msg) func set_username(new_username: Text) : () {
-    let caller = msg.caller;
-
+  public shared ({ caller }) func set_username(new_username: Text) : () {
     usernames := AssocList.replace(usernames, Principal.toText(caller), principal_eq, ?new_username).0;
   };
 
@@ -70,9 +66,7 @@ actor {
     return existing_tasks;
   };
 
-  public shared query (msg) func get_user_tasks(): async[Types.Task] {
-    let caller = msg.caller;
-
+  public shared query ({ caller }) func get_user_tasks(): async[Types.Task] {
     let user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     let mapped_tasks = List.map<(Nat, Types.Task), Types.Task>(
@@ -83,13 +77,11 @@ actor {
     return List.toArray(mapped_tasks);
   };
 
-  public shared (msg) func create_task(
+  public shared ({ caller }) func create_task(
     title: Text, 
     description: Text,
     username: Text,
   ) : async Types.Task {
-    let caller = msg.caller;
-
     let is_auth = is_authenticated(caller);
 
     if (is_auth == false) {
@@ -120,9 +112,7 @@ actor {
     return new_task;
   };
 
-  public shared (msg) func delete_task(task_id: Nat) : async Bool {
-    let caller = msg.caller;
-
+  public shared ({ caller }) func delete_task(task_id: Nat) : async Bool {
     let user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     switch (AssocList.find<Nat, Types.Task>(user_tasks, task_id, tasks_id_eq)) {
