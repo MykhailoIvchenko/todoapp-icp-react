@@ -4,7 +4,6 @@ import Principal "mo:base/Principal";
 import List "mo:base/List";
 import Time "mo:base/Time";
 import Bool "mo:base/Bool";
-import Debug "mo:base/Debug";
 import Types "./Types";
 
 actor {
@@ -15,15 +14,16 @@ actor {
   stable var tasks: AssocList.AssocList<Text, AssocList.AssocList<Nat, Types.Task>> = List.nil();
   
   public func clear_data() : () {
+    last_id := 0;
     usernames := null;
     tasks := null;
   };
 
-  func is_authenticated(caller: Principal) : async Bool {
+  func is_authenticated(caller: Principal) : Bool {
     return Principal.isAnonymous(caller) == false;
   };
   
-  func has_permission(caller : Principal, task : Types.Task) : async Bool {
+  func has_permission(caller : Principal, task : Types.Task) : Bool {
     return Principal.toText(caller) == task.userPrincipalId;
   };
 
@@ -43,10 +43,6 @@ actor {
     return result;
   };
 
-  public query func get_all_usernames() : async AssocList.AssocList<Text, Text> {
-    return usernames;
-  };
-
   public shared (msg) func set_username(new_username: Text) : () {
     let caller = msg.caller;
 
@@ -58,11 +54,11 @@ actor {
     return tasks;
   };
 
-  public shared func get_user_tasks_assoc_list(caller: Principal) : async AssocList.AssocList<Nat, Types.Task> {
-    let is_auth = await is_authenticated(caller);
+  private func get_user_tasks_assoc_list(caller: Principal) : AssocList.AssocList<Nat, Types.Task> {
+    let is_auth = is_authenticated(caller);
     
     if (is_auth == false) {
-      throw Error.reject("User is not authenticated.");
+      return List.nil();
     };
 
     var existing_tasks : AssocList.AssocList<Nat, Types.Task> = 
@@ -74,10 +70,10 @@ actor {
     return existing_tasks;
   };
 
-  public shared (msg) func get_user_tasks(): async[Types.Task] {
+  public shared query (msg) func get_user_tasks(): async[Types.Task] {
     let caller = msg.caller;
 
-    let user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list(caller);
+    let user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     let mapped_tasks = List.map<(Nat, Types.Task), Types.Task>(
         user_tasks,
@@ -94,7 +90,7 @@ actor {
   ) : async Types.Task {
     let caller = msg.caller;
 
-    let is_auth = await is_authenticated(caller);
+    let is_auth = is_authenticated(caller);
 
     if (is_auth == false) {
       throw Error.reject("User is not authenticated.");
@@ -115,7 +111,7 @@ actor {
       status = #notCompleted;
     };
 
-    var user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list(caller);
+    var user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     user_tasks := AssocList.replace(user_tasks, task_id, tasks_id_eq, ?new_task).0;
 
@@ -124,18 +120,14 @@ actor {
     return new_task;
   };
 
-  public shared query (msg) func whoami() : async Principal {
-    msg.caller
-  };
-
   public shared (msg) func delete_task(task_id: Nat) : async Bool {
     let caller = msg.caller;
 
-    let user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list(caller);
+    let user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     switch (AssocList.find<Nat, Types.Task>(user_tasks, task_id, tasks_id_eq)) {
         case (?task) {
-            let can_delete = await has_permission(caller, task);
+            let can_delete = has_permission(caller, task);
 
             let principal_id = Principal.toText(caller);
 

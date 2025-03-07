@@ -41,7 +41,7 @@ export const useDfinityAgent: UseDfinityAgent = () => {
             })
           ),
         ],
-        []
+        ['query']
       ),
       create_task: IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text],
