@@ -3,7 +3,6 @@ import { Principal } from '@dfinity/principal';
 import { useInternetIdentity } from 'ic-use-internet-identity';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-// import { idlFactory } from '../../../declarations/todoapp-icp-react-backend/todoapp-icp-react-backend.did';
 
 type UseDfinityAgent = () => ActorSubclass<
   Record<string, ActorMethod<unknown[], unknown>>
