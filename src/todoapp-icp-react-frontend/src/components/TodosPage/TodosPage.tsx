@@ -21,7 +21,7 @@ const TodosPage: React.FC = () => {
 
   const user = useSelectUser();
 
-  const { tasks, isLoading, createTask, deleteTask, setTasks } = useTasksList();
+  const { tasks, isLoading, createTask, deleteTask } = useTasksList();
 
   if (isLoading) {
     return <Loader />;
@@ -56,7 +56,7 @@ const TodosPage: React.FC = () => {
         </section>
 
         <footer className='todos-list__footer'>
-          <span>{tasks.length} items left</span>
+          <span>{tasks?.length} items left</span>
         </footer>
       </div>
 
