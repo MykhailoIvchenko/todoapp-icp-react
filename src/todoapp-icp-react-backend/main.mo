@@ -45,11 +45,6 @@ actor {
     usernames := AssocList.replace(usernames, Principal.toText(caller), principal_eq, ?new_username).0;
   };
 
-
-  public query func get_all_tasks() : async AssocList.AssocList<Text, AssocList.AssocList<Nat, Types.Task>> {
-    return tasks;
-  };
-
   private func get_user_tasks_assoc_list(caller: Principal) : AssocList.AssocList<Nat, Types.Task> {
     let is_auth = is_authenticated(caller);
     
@@ -113,6 +108,12 @@ actor {
   };
 
   public shared ({ caller }) func delete_task(task_id: Nat) : async Bool {
+    let is_auth = is_authenticated(caller);
+
+    if (is_auth == false) {
+      throw Error.reject("User is not authenticated.");
+    };
+
     let user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     switch (AssocList.find<Nat, Types.Task>(user_tasks, task_id, tasks_id_eq)) {
