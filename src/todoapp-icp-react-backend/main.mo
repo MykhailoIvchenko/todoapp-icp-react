@@ -5,24 +5,29 @@ import List "mo:base/List";
 import Time "mo:base/Time";
 import Bool "mo:base/Bool";
 import Types "./Types";
-import Debug "mo:base/Debug";
 
-shared({ caller }) actor class() {
-  stable var usernames : AssocList.AssocList<Principal, Text> = List.nil();
+actor {
+  stable var usernames : AssocList.AssocList<Text, Text> = List.nil();
 
   stable var last_id: Nat = 0;
   
-  stable var tasks: AssocList.AssocList<Principal, AssocList.AssocList<Nat, Types.Task>> = List.nil();
+  stable var tasks: AssocList.AssocList<Text, AssocList.AssocList<Nat, Types.Task>> = List.nil();
+  
+  public func clear_data() : () {
+    last_id := 0;
+    usernames := null;
+    tasks := null;
+  };
 
-  func is_authenticated() : async Bool {
+  func is_authenticated(caller: Principal) : Bool {
     return Principal.isAnonymous(caller) == false;
   };
   
-  func has_permission(caller : Principal, task : Types.Task) : async Bool {
-    return caller == task.userPrincipalId;
+  func has_permission(caller : Principal, task : Types.Task) : Bool {
+    return Principal.toText(caller) == task.userPrincipalId;
   };
 
-  func principal_eq(first_principal: Principal, second_principal: Principal): Bool {
+  func principal_eq(first_principal: Text, second_principal: Text): Bool {
     return first_principal == second_principal;
   };
 
@@ -30,25 +35,30 @@ shared({ caller }) actor class() {
     return first_task_id == second_task_id;
   };
 
-  public query func get_username() : async ?Text {
-    let result = AssocList.find<Principal, Text>(usernames, caller, principal_eq);
+  public query ({ caller }) func get_username() : async ?Text {
+    let result = AssocList.find<Text, Text>(usernames, Principal.toText(caller), principal_eq);
 
     return result;
   };
 
-  public func set_username(new_username: Text) : () {
-    usernames := AssocList.replace(usernames, caller, principal_eq, ?new_username).0;
+  public shared ({ caller }) func set_username(new_username: Text) : () {
+    usernames := AssocList.replace(usernames, Principal.toText(caller), principal_eq, ?new_username).0;
   };
 
-  func get_user_tasks_assoc_list() : async AssocList.AssocList<Nat, Types.Task> {
-    let is_auth = await is_authenticated();
+
+  public query func get_all_tasks() : async AssocList.AssocList<Text, AssocList.AssocList<Nat, Types.Task>> {
+    return tasks;
+  };
+
+  private func get_user_tasks_assoc_list(caller: Principal) : AssocList.AssocList<Nat, Types.Task> {
+    let is_auth = is_authenticated(caller);
     
     if (is_auth == false) {
-      throw Error.reject("User is not authenticated.");
+      return List.nil();
     };
 
     var existing_tasks : AssocList.AssocList<Nat, Types.Task> = 
-      switch (AssocList.find<Principal, AssocList.AssocList<Nat, Types.Task>>(tasks, caller, principal_eq)) {
+      switch (AssocList.find<Text, AssocList.AssocList<Nat, Types.Task>>(tasks, Principal.toText(caller), principal_eq)) {
         case (?tasks_list) tasks_list;
         case null List.nil();
       };
@@ -56,8 +66,8 @@ shared({ caller }) actor class() {
     return existing_tasks;
   };
 
-  public func get_user_tasks(): async[Types.Task] {
-    let user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list();
+  public shared query ({ caller }) func get_user_tasks(): async[Types.Task] {
+    let user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     let mapped_tasks = List.map<(Nat, Types.Task), Types.Task>(
         user_tasks,
@@ -67,11 +77,12 @@ shared({ caller }) actor class() {
     return List.toArray(mapped_tasks);
   };
 
-  public func create_task(
+  public shared ({ caller }) func create_task(
     title: Text, 
-    description: Text
+    description: Text,
+    username: Text,
   ) : async Types.Task {
-    let is_auth = await is_authenticated();
+    let is_auth = is_authenticated(caller);
 
     if (is_auth == false) {
       throw Error.reject("User is not authenticated.");
@@ -80,40 +91,39 @@ shared({ caller }) actor class() {
     last_id += 1;
     let task_id = last_id;
 
-    let user_name = await get_username();
+    let principal_id = Principal.toText(caller);
 
     let new_task = {
       title = title;
       description = description;
       createdAt = Time.now();
-      userPrincipalId = caller;
-      username = switch(user_name) {
-        case (?name) { name };
-        case null { "Unknown" };
-      };
+      userPrincipalId = principal_id;
+      username = username;
       taskId = task_id;
       status = #notCompleted;
     };
 
-    var user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list();
+    var user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     user_tasks := AssocList.replace(user_tasks, task_id, tasks_id_eq, ?new_task).0;
 
-    tasks := AssocList.replace(tasks, caller, principal_eq, ?user_tasks).0;
+    tasks := AssocList.replace(tasks, principal_id, principal_eq, ?user_tasks).0;
 
     return new_task;
   };
 
-  public func delete_task(task_id: Nat) : async Bool {
-    let user_tasks : AssocList.AssocList<Nat, Types.Task> = await get_user_tasks_assoc_list();
+  public shared ({ caller }) func delete_task(task_id: Nat) : async Bool {
+    let user_tasks : AssocList.AssocList<Nat, Types.Task> = get_user_tasks_assoc_list(caller);
 
     switch (AssocList.find<Nat, Types.Task>(user_tasks, task_id, tasks_id_eq)) {
         case (?task) {
-            let can_delete = await has_permission(caller, task);
+            let can_delete = has_permission(caller, task);
+
+            let principal_id = Principal.toText(caller);
 
             if (can_delete) {
                 let updated_tasks = AssocList.replace(user_tasks, task_id, tasks_id_eq, null).0;
-                tasks := AssocList.replace(tasks, caller, principal_eq, ?updated_tasks).0;
+                tasks := AssocList.replace(tasks, principal_id, principal_eq, ?updated_tasks).0;
                 
                 return true;
             } else {

@@ -28,7 +28,7 @@ export const useUserName: UseUsername = () => {
       if (principalId && actor) {
         const username = (await actor.get_username()) as string[];
 
-        if (username.length > 0 && username[0]) {
+        if (username && username?.length > 0 && username[0]) {
           setUsername(username[0]);
         }
       }
@@ -48,7 +48,6 @@ export const useUserName: UseUsername = () => {
         setUsername(newUsername);
       }
     } catch (error) {
-      console.log(error);
       toast.error('An error occured during the username saving');
     } finally {
       setIsLoading(false);

@@ -30,30 +30,37 @@ export const useDfinityAgent: UseDfinityAgent = () => {
               title: IDL.Text,
               description: IDL.Text,
               createdAt: IDL.Int,
-              userPrincipalId: IDL.Principal,
+              userPrincipalId: IDL.Text,
               username: IDL.Text,
               taskId: IDL.Nat,
-              status: IDL.Variant({ notCompleted: null, completed: null }),
+              status: IDL.Variant({
+                notCompleted: IDL.Null,
+                completed: IDL.Null,
+              }),
             })
           ),
         ],
         ['query']
       ),
       create_task: IDL.Func(
-        [IDL.Text, IDL.Text],
+        [IDL.Text, IDL.Text, IDL.Text],
         [
           IDL.Record({
             title: IDL.Text,
             description: IDL.Text,
             createdAt: IDL.Int,
-            userPrincipalId: IDL.Principal,
+            userPrincipalId: IDL.Text,
             username: IDL.Text,
             taskId: IDL.Nat,
-            status: IDL.Variant({ notCompleted: null, completed: null }),
+            status: IDL.Variant({
+              notCompleted: IDL.Null,
+              completed: IDL.Null,
+            }),
           }),
         ],
         []
       ),
+      delete_task: IDL.Func([IDL.Nat], [], []),
       set_username: IDL.Func([IDL.Text], [], []),
     });
 
@@ -81,7 +88,7 @@ export const useDfinityAgent: UseDfinityAgent = () => {
 
   useEffect(() => {
     getActorAndSet();
-  }, []);
+  }, [identity]);
 
   return actor;
 };
